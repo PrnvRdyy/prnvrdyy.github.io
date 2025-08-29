@@ -11,7 +11,7 @@
     <style>
         /* Base Colors & Typography */
         :root {
-            --bg-charcoal: #181818;
+            --bg-charcoal: #181818; /* Reverted to dark grey */
             --bg-secondary: rgba(28, 28, 28, 0.7);
             --text-primary: #EAEAEA;
             --text-muted: #888;
@@ -28,7 +28,6 @@
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1, h2, h3, .font-heading {
@@ -86,15 +85,36 @@
         }
          @media (max-width: 1024px) {
             body:not(.sidebar-collapsed) #menu-toggle {
-                /* Move the 'X' button to the right of the sidebar on mobile to not cover the logo */
                 left: 12.5rem;
             }
         }
 
 
         /* Hero Section */
-        #hero { height: 100vh; position: relative; overflow: hidden; }
-        #hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translateX(-50%) translateY(-50%); z-index: -1; object-fit: cover; }
+        #hero { 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden;
+            background-color: #000;
+        }
+        #hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translateX(-50%) translateY(-50%); z-index: 1; object-fit: cover; }
+        #hero .overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 2;
+        }
+        /* The blending gradient */
+        #hero .blend-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15vh; /* Adjust height of the blend area */
+            background: linear-gradient(to bottom, transparent, var(--bg-charcoal));
+            z-index: 3;
+        }
+
 
         /* Neumorphic Button */
         .neumorphic-btn {
@@ -125,22 +145,11 @@
         .timeline-dot { background-color: var(--secondary-teal); border: 3px solid var(--bg-charcoal); transition: background-color 0.3s ease, border-color 0.3s ease; }
         .timeline-item.is-visible .timeline-dot { background-color: var(--accent-blue); }
         
-        /* Responsive Timeline: single column on mobile */
         @media (max-width: 767px) {
-            .timeline-line {
-                left: 1rem;
-            }
-            .timeline-item-container {
-                padding-left: 3rem;
-                padding-right: 0;
-                width: 100%;
-                text-align: left !important;
-            }
-            .timeline-dot {
-                left: 1rem;
-            }
+            .timeline-line { left: 1rem; }
+            .timeline-item-container { padding-left: 3rem; padding-right: 0; width: 100%; text-align: left !important; }
+            .timeline-dot { left: 1rem; }
         }
-
 
         /* Form elements */
         .form-input {
@@ -148,20 +157,15 @@
             border: 1px solid var(--border-color);
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        #form-status {
-            margin-top: 1rem;
-            font-weight: bold;
-        }
+        #form-status { margin-top: 1rem; font-weight: bold; }
     </style>
 </head>
 <body class="overflow-x-hidden">
-    <!-- Menu Toggle Button -->
     <button id="menu-toggle" class="p-2">
         <svg id="menu-open-icon" class="w-8 h-8 block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
         <svg id="menu-close-icon" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
     
-    <!-- Sidebar Navigation -->
     <nav id="sidebar" class="fixed top-0 left-0 h-full w-64 z-40 p-6 flex flex-col">
         <div class="flex justify-between items-center mb-12">
             <h2 class="text-2xl font-heading tracking-widest">PR</h2>
@@ -177,13 +181,13 @@
     </nav>
 
     <div id="main-content">
-        <!-- Hero Section -->
         <section id="hero" class="flex flex-col items-center justify-center text-center">
             <video autoplay muted loop playsinline id="hero-video" poster="https://placehold.co/1920x1080/181818/181818">
                 <source src="https://assets.mixkit.co/videos/preview/mixkit-a-bunch-of-old-projectors-playing-different-clips-4328-large.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-            <div class="relative z-10 p-4 sm:p-8 text-white">
+            <div class="overlay"></div>
+            <div class="blend-gradient"></div>
+            <div class="relative z-10 p-4 sm:p-8 text-white" style="z-index: 4;">
                 <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-heading tracking-wider leading-tight">
                     <span class="block">CINEMATIC.</span>
                     <span class="block text-gray-400">MOTION MAGIC.</span>
@@ -191,10 +195,8 @@
             </div>
         </section>
 
-        <!-- Main Content Wrapper -->
         <main class="w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32 space-y-20 md:space-y-32">
 
-            <!-- About Section -->
             <section id="about" class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                 <div class="lg:col-span-2">
                     <img src="https://placehold.co/600x800/181818/4A6D7C?text=Pranav+Reddy" alt="Pranav Reddy" class="rounded-lg shadow-2xl w-full max-w-sm mx-auto lg:max-w-full h-auto object-cover">
@@ -221,11 +223,9 @@
                 </div>
             </section>
 
-            <!-- Portfolio Section -->
             <section id="portfolio" class="min-h-screen">
                 <h2 class="text-4xl md:text-6xl font-heading text-center mb-12">My Work</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Portfolio Items -->
                     <div class="portfolio-item group relative rounded-lg overflow-hidden cursor-pointer shadow-lg" data-video-src="https://assets.mixkit.co/videos/preview/mixkit-urban-man-skateboarding-on-a-parking-lot-4318-large.mp4" data-title="Tech Fest Promo" data-description="My Role: Lead Editor & Colorist. Goal: To create a fast-paced promotional video for the college tech-fest, focusing on energy and quick cuts to build hype.">
                         <img src="https://placehold.co/600x400/181818/33E1FF?text=Tech+Fest" alt="Tech Fest Promo" class="thumbnail-image w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                         <video muted loop playsinline class="video-preview"></video>
@@ -250,7 +250,6 @@
                 </div>
             </section>
 
-            <!-- Services Section -->
             <section id="services" class="text-center">
                  <h2 class="text-4xl md:text-6xl font-heading text-center mb-12">What I Do</h2>
                  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -272,12 +271,10 @@
                  </div>
             </section>
 
-            <!-- Visual Timeline Section -->
             <section id="experience">
                 <h2 class="text-4xl md:text-6xl font-heading text-center mb-20">My Journey</h2>
                 <div class="relative max-w-2xl mx-auto py-4">
                     <div class="timeline-line absolute top-0 h-full w-1 -ml-px md:left-1/2"></div>
-                    
                     <div class="timeline-item mt-8 md:mt-0 relative">
                         <div class="timeline-dot absolute top-1/2 w-4 h-4 rounded-full -mt-2 -ml-2 md:left-1/2 z-10"></div>
                         <div class="timeline-item-container md:ml-auto md:pl-16 md:w-1/2">
@@ -288,7 +285,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="timeline-item mt-8 relative">
                         <div class="timeline-dot absolute top-1/2 w-4 h-4 rounded-full -mt-2 -ml-2 md:left-1/2 z-10"></div>
                          <div class="timeline-item-container md:mr-auto md:pr-16 md:w-1/2 text-left md:text-right">
@@ -299,7 +295,6 @@
                              </div>
                         </div>
                     </div>
-                    
                      <div class="timeline-item mt-8 relative">
                         <div class="timeline-dot absolute top-1/2 w-4 h-4 rounded-full -mt-2 -ml-2 md:left-1/2 z-10"></div>
                         <div class="timeline-item-container md:ml-auto md:pl-16 md:w-1/2">
@@ -310,7 +305,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="timeline-item mt-8 relative">
                         <div class="timeline-dot absolute top-1/2 w-4 h-4 rounded-full -mt-2 -ml-2 md:left-1/2 z-10"></div>
                          <div class="timeline-item-container md:mr-auto md:pr-16 md:w-1/2 text-left md:text-right">
@@ -321,11 +315,9 @@
                              </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Contact Section -->
             <section id="contact" class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
                  <div>
                     <h2 class="text-3xl md:text-5xl font-heading mb-6">Have a project in mind?<br><span style="color: var(--secondary-teal)">Let's create.</span></h2>
@@ -357,7 +349,6 @@
                     <div id="form-status"></div>
                 </div>
             </section>
-
         </main>
         
         <footer class="text-center py-8 border-t" style="border-color: var(--border-color);">
@@ -365,7 +356,6 @@
         </footer>
     </div>
 
-    <!-- Lightbox Modal -->
     <div id="lightbox" class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center p-4 hidden">
         <div class="relative w-full max-w-4xl rounded-lg">
              <button id="close-lightbox" class="absolute -top-10 right-0 text-white text-5xl font-light">&times;</button>
@@ -378,9 +368,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const body = document.body;
-        const sidebar = document.getElementById('sidebar');
         const menuToggle = document.getElementById('menu-toggle');
-        const mainContent = document.getElementById('main-content');
         const menuOpenIcon = document.getElementById('menu-open-icon');
         const menuCloseIcon = document.getElementById('menu-close-icon');
 
@@ -405,15 +393,13 @@
         const sections = document.querySelectorAll('section[id]');
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
         const observerOptions = { root: null, rootMargin: '0px 0px -50% 0px', threshold: 0 };
-        const sectionObserver = new IntersectionObserver((entries, observer) => {
+        const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const id = entry.target.getAttribute('id');
                     sidebarLinks.forEach(link => {
                         link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
+                        if (link.getAttribute('href') === `#${id}`) link.classList.add('active');
                     });
                 }
             });
@@ -430,11 +416,8 @@
             });
         });
         
-        if (window.innerWidth < 1024) {
-             body.classList.add('sidebar-collapsed');
-        }
+        if (window.innerWidth < 1024) body.classList.add('sidebar-collapsed');
         updateMenuIcons();
-
 
         const statItems = document.querySelectorAll('.stat-item p[data-target]');
         const statObserver = new IntersectionObserver((entries, observer) => {
@@ -452,15 +435,12 @@
                         frame++;
                         const progress = frame / totalFrames;
                         const currentCount = target * progress;
-                        
                         el.innerText = (target % 1 !== 0) ? currentCount.toFixed(1) : Math.round(currentCount);
-
                         if (frame === totalFrames) {
                             clearInterval(counter);
                             el.innerText = target;
                         }
                     }, frameDuration);
-                    
                     observer.unobserve(el);
                 }
             });
@@ -479,9 +459,7 @@
                 if (entry.isIntersecting) {
                     const item = entry.target;
                     const videoPreview = item.querySelector('.video-preview');
-                    if (videoPreview && !videoPreview.src) {
-                        videoPreview.src = item.dataset.videoSrc;
-                    }
+                    if (videoPreview && !videoPreview.src) videoPreview.src = item.dataset.videoSrc;
                     observer.unobserve(item);
                 }
             });
@@ -490,15 +468,12 @@
         portfolioItems.forEach(item => {
             videoPreloadObserver.observe(item);
             const videoPreview = item.querySelector('.video-preview');
-            
             item.addEventListener('mouseenter', () => {
                 if (videoPreview && videoPreview.readyState >= 3) { 
                      const playPromise = videoPreview.play();
-                     if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            if (error.name !== 'AbortError') console.error("Video play failed:", error);
-                        });
-                     }
+                     if (playPromise !== undefined) playPromise.catch(error => {
+                        if (error.name !== 'AbortError') console.error("Video play failed:", error);
+                     });
                 }
             });
             item.addEventListener('mouseleave', () => {
@@ -523,18 +498,12 @@
             document.body.style.overflow = '';
         };
         closeLightboxBtn.addEventListener('click', closeLightbox);
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) closeLightbox();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox();
-        });
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox(); });
 
         const timelineItems = document.querySelectorAll('.timeline-item');
         const timelineObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('is-visible');
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
         }, { threshold: 0.1 });
         timelineItems.forEach(item => timelineObserver.observe(item));
 
@@ -555,12 +524,8 @@
                     form.reset();
                 } else {
                     const responseData = await response.json();
-                    if (Object.hasOwn(responseData, 'errors')) {
-                        formStatus.textContent = responseData["errors"].map(error => error["message"]).join(", ");
-                    } else {
-                        formStatus.textContent = "Oops! There was a problem submitting your form";
-                    }
-                     formStatus.style.color = '#ff4d4d';
+                    formStatus.textContent = Object.hasOwn(responseData, 'errors') ? responseData["errors"].map(e => e["message"]).join(", ") : "Oops! There was a problem.";
+                    formStatus.style.color = '#ff4d4d';
                 }
             } catch (error) {
                 formStatus.textContent = "Oops! There was a problem submitting your form";
